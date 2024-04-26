@@ -15,5 +15,4 @@ RUN apt update && apt install -y curl
 
 WORKDIR /app
 COPY --from=build /app/target/release/integral_ads /app/integral_ads
-COPY .env .env
 ENTRYPOINT ["/app/integral_ads"]
