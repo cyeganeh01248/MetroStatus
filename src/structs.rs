@@ -7,14 +7,14 @@ use serde::Deserialize;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
-/** asdf
+/** A program to get all the trains accepting passengers for a specific station.
  */
 pub struct Args {
-    /// Name of the person to greet
-    #[arg(env = "API_KEY", long)]
+    /// The API Key to use. Defaults to the public demo key
+    #[arg(short, long, default_value = "e13626d03d8e4c03ac07f95541b3091b")]
     pub api_key: String,
 
-    /// Number of times to greet
+    /// The Name of the station to look for. Defaults to Huntington
     #[arg(short, long, default_value = "Huntington")]
     pub target_station: String,
 }

@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 
 use clap::Parser;
-use dotenv::dotenv;
 use reqwest::Client;
 
 use crate::structs::{Args, Station, Train};
@@ -10,9 +9,7 @@ mod structs;
 
 #[tokio::main]
 async fn main() {
-    dotenv().expect("Unable to load .env file.");
     let args = Args::parse();
-    println!("{}", args.api_key);
     let api_key = args.api_key;
     let target_station = args.target_station;
 
