@@ -4,7 +4,7 @@ use std::env::var;
 use dotenv::dotenv;
 use reqwest::Client;
 
-use crate::structs::Station;
+use crate::structs::{Station, Train};
 
 mod structs;
 
@@ -13,6 +13,7 @@ async fn main() {
     dotenv().expect("Unable to load .env file.");
     let api_key = var("API_KEY")
         .expect("Unable to get API Key. Please define an Env Variable with a valid API_KEY");
+    let target_station = "Farragut North";
 
     let client = Client::new();
 
@@ -27,18 +28,39 @@ async fn main() {
     }
 
     let station_id_resp = client
-        .get("https://api.wmata.com/Rail.svc/json/jStations?LineCode=YL")
+        .get("https://api.wmata.com/Rail.svc/json/jStations")
         .header("api_key", api_key.clone())
         .send().await.expect("Unable to make request to get station id");
 
     let station_ids = station_id_resp.json::<HashMap<String, Vec<Station>>>()
-        .await.expect("Unable to parse json")["Stations"].clone();
+        .await.expect("Unable to parse station id json")["Stations"].clone();
 
 
-    let mut station_code = "".to_string();
+    let mut station_id = "".to_string();
     for station in station_ids {
-        if station.Name == "Huntington" {
-            station_code = station.Code;
+        if station.name == target_station {
+            station_id = station.code;
         }
+    }
+    if station_id == "" {
+        panic!("Unable to find station code for {target_station}");
+    } else {
+        println!("{target_station} found. Station id {station_id}")
+    }
+
+    let next_trains_resp = client
+        .get(format!("https://api.wmata.com/StationPrediction.svc/json/GetPrediction/{station_id}"))
+        .header("api_key", api_key.clone())
+        .send().await.expect("Unable to make request to get next trains");
+
+    let next_trains = next_trains_resp.json::<HashMap<String, Vec<Train>>>()
+        .await.expect("Unable to parse next train json")["Trains"].clone();
+
+    let filtered_next_trains = next_trains.into_iter().filter(|train| {
+        train.destination_name != "No Passenger"
+    }).collect::<Vec<Train>>();
+
+    for train in filtered_next_trains {
+        println!("{train:}");
     }
 }
