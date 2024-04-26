@@ -11,7 +11,12 @@ use serde::Deserialize;
  */
 pub struct Args {
     /// The API Key to use. Defaults to the public demo key
-    #[arg(short, long, default_value = "e13626d03d8e4c03ac07f95541b3091b")]
+    #[arg(
+        short,
+        long,
+        env = "API_KEY",
+        default_value = "e13626d03d8e4c03ac07f95541b3091b"
+    )]
     pub api_key: String,
 
     /// The Name of the station to look for. Defaults to Huntington

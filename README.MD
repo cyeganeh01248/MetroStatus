@@ -55,8 +55,10 @@ To then run the program with docker, execute the following command:
 docker run --rm -it metro_status [--api-key YOUR_API_KEY] [--target-station TARGET_STATION_NAME]
 ```
 
-If desired, replace `YOUR_API_KEY` with your WMATA API key and `TARGET_STATION_NAME` with the name of the station you
+If desired, replace `YOUR_API_KEY` with your WMATA API Key and `TARGET_STATION_NAME` with the name of the station you
 want to fetch train schedules for. Leaving off the `TARGET_STATION_NAME` will default to Huntington Station.
+
+You may also provide your API key by providing a value to the `API_KEY` environment variable.
 
 ### Command-line Options
 
