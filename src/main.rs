@@ -1,19 +1,20 @@
 use std::collections::HashMap;
-use std::env::var;
 
+use clap::Parser;
 use dotenv::dotenv;
 use reqwest::Client;
 
-use crate::structs::{Station, Train};
+use crate::structs::{Args, Station, Train};
 
 mod structs;
 
 #[tokio::main]
 async fn main() {
     dotenv().expect("Unable to load .env file.");
-    let api_key = var("API_KEY")
-        .expect("Unable to get API Key. Please define an Env Variable with a valid API_KEY");
-    let target_station = "Farragut North";
+    let args = Args::parse();
+    println!("{}", args.api_key);
+    let api_key = args.api_key;
+    let target_station = args.target_station;
 
     let client = Client::new();
 
@@ -60,6 +61,7 @@ async fn main() {
         train.destination_name != "No Passenger"
     }).collect::<Vec<Train>>();
 
+    println!("{} Train(s) found.", filtered_next_trains.len());
     for train in filtered_next_trains {
         println!("{train:}");
     }
