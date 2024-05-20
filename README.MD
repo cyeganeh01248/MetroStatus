@@ -3,6 +3,8 @@
 This Rust program is designed to retrieve information about upcoming trains arriving at a specified station. It utilizes
 the Washington Metropolitan Area Transit Authority (WMATA) API to fetch real-time train predictions.
 
+This project was developed in a 24 hour code challenge for a Job Interview.
+
 ## Installation
 
 Ensure you have Rust installed on your system. If not, you can install it
